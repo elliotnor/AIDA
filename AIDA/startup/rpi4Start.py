@@ -6,8 +6,8 @@ chmod_path = "/usr/bin/chmod"
 def run_commands(path):
     try:
         # Change to the workspace directory
-        os.chdir('aida/AIDA/ros2_humble_ws/')
-        print("Changed directory to aida/AIDA/ros2_humble_ws/")
+        os.chdir('/home/aida/AIDA/AIDA/ros2_humble_ws/')
+        print("Changed directory to /home/aida/AIDA/AIDA/ros2_humble_ws/")
 
         # Source the ROS 2 setup.bash script
         subprocess.run('source /opt/ros/humble/setup.bash', shell=True, check=True, executable='/bin/bash')
@@ -18,7 +18,7 @@ def run_commands(path):
         print("Changed directory to launch/")
 
         # Source the local setup.bash script
-        subprocess.run('source ../install/local_setup.bash', shell=True, check=True, executable='/bin/bash')
+        subprocess.run('source /home/aida/AIDA/AIDA/ros2_humble_ws/install/local_setup.bash', shell=True, check=True, executable='/bin/bash')
         print("Sourced ../install/local_setup.bash")
 
         # Change permissions for /dev/ttyUSB0
@@ -26,7 +26,7 @@ def run_commands(path):
         print("Changed permissions for /dev/ttyUSB0")
 
         # Launch the ROS 2 application
-        subprocess.run('ros2 launch rpi4.yaml', shell=True, check=True)
+        subprocess.run('ros2 launch /home/aida/AIDA/AIDA/ros2_humble_ws/launch/rpi4.yaml', shell=True, check=True)
         print("Launched ros2 launch rpi4.yaml")
 
     except subprocess.CalledProcessError as e:
