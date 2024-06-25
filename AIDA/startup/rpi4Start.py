@@ -27,7 +27,8 @@ def run_commands(path):
         print("Changed permissions for /dev/ttyUSB0")
 
         # Launch the ROS 2 application
-        subprocess.run('/opt/ros/humble/bin/ros2 launch /home/aida/AIDA/AIDA/ros2_humble_ws/launch/rpi4.yaml', shell=True, check=True)        print("Launched ros2 launch rpi4.yaml")
+        subprocess.run('ros2 launch /home/aida/AIDA/AIDA/ros2_humble_ws/launch/rpi4.yaml', shell=True, check=True)        
+        print("Launched ros2 launch rpi4.yaml")
 
     except subprocess.CalledProcessError as e:
         print(f"Command failed with error: {e}")
