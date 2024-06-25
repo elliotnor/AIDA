@@ -3,7 +3,7 @@ import os
 
 def main():
     # Define the path to the file
-    file_path = '/path/to/your/directory/service_executed.txt'
+    file_path = '/home/aida/AIDA/service.txt'
     
     # Ensure the directory exists
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
