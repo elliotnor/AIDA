@@ -1,7 +1,9 @@
 import subprocess
 import os
 
-def run_commands():
+chmod_path = "/usr/bin/chmod"
+
+def run_commands(path):
     try:
         # Change to the workspace directory
         os.chdir('aida/AIDA/ros2_humble_ws/')
@@ -20,7 +22,7 @@ def run_commands():
         print("Sourced ../install/local_setup.bash")
 
         # Change permissions for /dev/ttyUSB0
-        subprocess.run('sudo chmod 666 /dev/ttyUSB0', shell=True, check=True)
+        subprocess.run(['sudo', path ,'666', '/dev/ttyUSB0'], shell=True, check=True)
         print("Changed permissions for /dev/ttyUSB0")
 
         # Launch the ROS 2 application
@@ -33,4 +35,4 @@ def run_commands():
         print(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
-        run_commands()
+        run_commands(chmod_path)
