@@ -21,8 +21,8 @@ run_commands() {
     echo "Sourced /home/aida/AIDA/AIDA/ros2_humble_ws/install/local_setup.bash"
 
     # Change permissions for /dev/ttyUSB0
-    sudo $chmod_path 666 /dev/ttyUSB0
-    echo "Changed permissions for /dev/ttyUSB0"
+    #sudo $chmod_path 666 /dev/ttyUSB0
+    #echo "Changed permissions for /dev/ttyUSB0"
 
     # Launch the ROS 2 application
     /opt/ros/humble/bin/ros2 launch /home/aida/AIDA/AIDA/ros2_humble_ws/launch/rpi4.yaml

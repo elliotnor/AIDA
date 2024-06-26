@@ -150,7 +150,7 @@ class Lidar(Node):
         end_angel = (bytes_data[43] << 8) | bytes_data[42]
         time_stamp = (bytes_data[45] << 8) | bytes_data[44]
         crc = bytes_data[1]
-    
+        print("Hello")
         
         for i in range(11):       
             distance = (bytes_data[4 + (i*3)+3] << 8) | (bytes_data[3 + (i*3)+3])
@@ -233,7 +233,6 @@ class Lidar(Node):
         self.thread.join()
 
 def main(args=None):
-    
     rclpy.init(args=args)
     lidar = Lidar("/dev/ttyUSB0", angle_offset=0)
     lidar.start()
