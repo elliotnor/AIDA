@@ -6,11 +6,11 @@ launch:
 #     name: "ros2_mic_node"
 #     namespace: "mic"
 
-#- node:
-#    pkg: "speech_to_text"
-#    exec: "faster_whisper_node"
-#    name: "speech_to_text"
-#    namespace: ""
+- node:
+    pkg: "speech_to_text"
+    exec: "faster_whisper_node"
+    name: "speech_to_text"
+    namespace: ""
 
 # - node:
 #     pkg: "aida_api"
@@ -33,7 +33,8 @@ launch:
     exec: "lidar_reader"
     name: "lidar"
 
-# - node:
-#     pkg: "lidar"
-#     exec: "lidar_to_image"
-#     name: "lidar_to_image"
+#- node:
+#    pkg: "lidar"
+#    exec: "lidar_to_image"
+#    name: "lidar_to_image"
+

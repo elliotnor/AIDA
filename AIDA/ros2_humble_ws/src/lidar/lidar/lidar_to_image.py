@@ -65,8 +65,10 @@ class LidarToImage(Node):
         Returns:
             None
         """
+        #print("Im publishing")
         msg = self.bridge.cv2_to_imgmsg(cv_img, "bgr8")
         msg.header.frame_id = str(self.frame_count)
+        #print(str(msg))
         self.publisher.publish(msg)
 
     def draw_points_on_canvas(self,canvas, distances, color=(0, 0, 0), point_size=1):
@@ -81,7 +83,7 @@ class LidarToImage(Node):
         Returns:
             None
         """
-
+        print(distances)
         # Calculate center coordinates
         center_x = int(canvas.shape[1] / 2)
         center_y = int(canvas.shape[0] / 2)
