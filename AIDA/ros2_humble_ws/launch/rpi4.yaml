@@ -12,7 +12,7 @@ launch:
     name: "speech_to_text"
     namespace: ""
 
-# - node:
+#- node:
 #     pkg: "aida_api"
 #     exec: "ros2_interface"
 #     name: "api"
