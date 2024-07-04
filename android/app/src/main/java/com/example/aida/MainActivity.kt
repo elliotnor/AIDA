@@ -161,6 +161,7 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         onCameraClicked = { viewModel.toggleCameraFeed() },
+                        onGestureClicked = { viewModel.toggleGestureFeed()},
                         barHeight = barHeight,
                         topBarTitle = topBarTitle
                     )

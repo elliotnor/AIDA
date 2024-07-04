@@ -41,6 +41,7 @@ import com.example.aida.ui.theme.TopBarColor
 fun TopBar(
     onMenuClicked: () -> Unit,
     onCameraClicked: () -> Unit,
+    onGestureClicked: ()->Unit,
     barHeight: Dp,
     topBarTitle: String,
 ) {
@@ -88,6 +89,7 @@ fun TopBar(
         ) {
             var cameraPress by remember { mutableStateOf("on") }
             var speakerPress by remember { mutableStateOf("on") }
+            var gesturePress by remember { mutableStateOf("on") }
 
             Spacer(Modifier.weight(5f))
 
@@ -136,6 +138,30 @@ fun TopBar(
                         .offset(y = (-2).dp)
                 )
             }
+
+            Column(
+                modifier = Modifier
+                    .clickable(onClick = {
+                        gesturePress = if (gesturePress == "on") "off" else "on"
+                        onGestureClicked()
+                    }
+                    )
+                    .padding(top = 10.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.camera_button),
+                    contentDescription = "gesture",
+                    Modifier
+                        .scale(1.2f)
+                )
+                Text(
+                    text = gesturePress,
+                    Modifier
+                        .offset(y = (-2).dp)
+                )
+            }
+            Spacer(Modifier.weight(1f))
+
             Spacer(Modifier.weight(1f))
             Text(
                 text = "Battery: " + 69 + "%",

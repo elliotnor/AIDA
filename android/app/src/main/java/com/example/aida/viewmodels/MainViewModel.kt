@@ -173,6 +173,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     private val _lidarConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     private val _sttConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     private val _joystickConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
+    private val _gestureFeedConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     // Image bitmap for camera feed
     private val _videoBitmap = MutableStateFlow<ImageBitmap?>(null)
     // Image bitmap for lidar
@@ -184,6 +185,8 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     val sttConnectionStage: StateFlow<ConnectionStages> = _sttConnectionStage.asStateFlow()
     val joystickConnectionStage: StateFlow<ConnectionStages> =
         _joystickConnectionStage.asStateFlow()
+    val gestureFeedConnectionStage: StateFlow<ConnectionStages> =
+        _gestureFeedConnectionStage.asStateFlow()
     // Image bitmap for camera feed
     val videoBitmap: StateFlow<ImageBitmap?> = _videoBitmap.asStateFlow()
     // Image bitmap for lidar
@@ -218,6 +221,30 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                     connectToVideo(ipAddress.value, port.value)
                 }
             }
+    }
+
+    fun toggleGestureFeed(){
+        if (_cameraFeedConnectionStage.value == ConnectionStages.CONNECTION_SUCCEEDED){
+            viewModelScope.launch (Dispatchers.IO){
+                try {
+                    videoClient.sendStopGesture()
+                    videoClient.stop()
+                    _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_CLOSED
+                }
+                catch (e: Exception){
+                    _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                    println("Can't close gesture: $e")
+                }
+
+            }
+
+        }
+        else if (_gestureFeedConnectionStage.value == ConnectionStages.CONNECTION_CLOSED){
+            viewModelScope.launch (Dispatchers.IO){
+                _gestureFeedConnectionStage.value = ConnectionStages.CONNECTING
+                connectToVideo(ipAddress.value, port.value)
+            }
+        }
     }
     /**
     * Connects to AIDA API with all clients
@@ -267,6 +294,30 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
             }
         }
     }
+
+    private fun connectToGesture(ip: String, prt: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                videoClient = VideoClient(
+                    ip = ip,
+                    port = prt,
+                    timeToTimeout = 10000
+                )
+                videoClient.sendStartGesture()
+                _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+
+
+
+            } catch (e: Exception) {
+                println("Can't Connect to Gesture: $e")
+                // If we close the gesture - we fetch from a closed connection. Set the
+                // connection stage to closed, else set to failed.
+                if (_gestureFeedConnectionStage.value != ConnectionStages.CONNECTION_CLOSED)
+                    _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+            }
+        }
+    }
+
     /**
     * Connects the STT client to the server
      */
