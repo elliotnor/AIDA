@@ -21,15 +21,20 @@ class MinimalSubscriber(Node):
         y = -(msg.y)
         square = 1 / math.sqrt(2)
         
-        if(y<=1) or (y> square):
+        if(y<=1) and (y> square):
+            print("moving forwards")
             self.joystickDirection = "forward"
-        elif(y >= -1) or (y < -square):
+        elif(y >= -1) and (y < -square):
+            print("moving backwards")
             self.joystickDirection = "backward"
         
-        elif(x <= 1) or (x > square):
+        elif(x <= 1) and (x > square):
+            print("turning right")
             self.joystickDirection = "rigth"
+
         
-        elif(x <= -1) or (x < square):
+        elif(x <= -1) and (x < square):
+            print("turning left")
             self.joystickDirection = "left"
 
         msg = String()

@@ -38,3 +38,7 @@ launch:
 #    exec: "lidar_to_image"
 #    name: "lidar_to_image"
 
+- node:
+    pkg: "joystickConverter"
+    exec: "convertJoystickData"
+    name: "joystick_converter_node"
