@@ -136,5 +136,6 @@ fun CameraPage(
                         viewModel.startVoiceRecording()
                     })
         )
+
     }
 }
