@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
@@ -20,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -36,9 +40,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.aida.pages.CameraPage
 import com.example.aida.pages.ConfigurationPage
+import com.example.aida.pages.UserGuidePage
 import com.example.aida.ui.composables.TopBar
 import com.example.aida.ui.theme.AIDATheme
 import com.example.aida.viewmodels.MainViewModel
+import com.example.aida.viewmodels.ButtonViewModel
 import com.example.aida.viewmodels.MainViewModelFactory
 import kotlinx.coroutines.launch
 
@@ -91,6 +97,7 @@ class MainActivity : ComponentActivity() {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             var state by remember { mutableIntStateOf(0) }
             val scope = rememberCoroutineScope()
+            var viewModel2 = ButtonViewModel()
 
             // Setup menu drawer
             ModalNavigationDrawer(
@@ -108,7 +115,7 @@ class MainActivity : ComponentActivity() {
                                 scope.launch {
                                     drawerState.close()
                                 }
-                                topBarTitle = "AIDA Remote Control Beta"
+                                topBarTitle = "AIDA Remote Control Application"
                             }
                         )
                         NavigationDrawerItem(
@@ -137,7 +144,26 @@ class MainActivity : ComponentActivity() {
                             },
                             label = { Text(text = "User guide") },
                             selected = false,
-                            onClick = { /*TODO*/ }
+                            onClick = {
+                                state = 2
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                                topBarTitle = "Userguide"
+                            }
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        NavigationDrawerItem(
+                            icon = {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.ExitToApp,
+                                    contentDescription = "Shutdown application"
+                                )
+                            },
+                            
+                            label = { Text(text = "Application shutdown", color = Color.Red) },
+                            selected = false,
+                            onClick = { System.exit(0) }
                         )
                     }
                 },
@@ -163,7 +189,8 @@ class MainActivity : ComponentActivity() {
                         onCameraClicked = { viewModel.toggleCameraFeed() },
                         onGestureClicked = { viewModel.toggleGestureFeed()},
                         barHeight = barHeight,
-                        topBarTitle = topBarTitle
+                        topBarTitle = topBarTitle,
+                        viewModel2 = viewModel2,
                     )
 
                     // Main logic when switching between pages
@@ -172,10 +199,20 @@ class MainActivity : ComponentActivity() {
                             screenHeight = screenHeight,
                             barHeight = barHeight,
                             screenWidth =screenWidth,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            viewModel2 = viewModel2,
+
                         )
 
                         1 -> ConfigurationPage(
+                            barHeight = barHeight,
+                            viewModel = viewModel,
+                            onButtonPress = {
+                                state = 0
+                                topBarTitle = "AIDA Remote Control Beta"
+                            }
+                        )
+                        2 -> UserGuidePage(
                             barHeight = barHeight,
                             viewModel = viewModel,
                             onButtonPress = {

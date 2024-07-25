@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aida.R
 import com.example.aida.ui.theme.TopBarColor
+import com.example.aida.viewmodels.ButtonViewModel
 
 /**
  * Function for the top bar, contains both UI and logic, however some
@@ -44,8 +45,10 @@ fun TopBar(
     onGestureClicked: ()->Unit,
     barHeight: Dp,
     topBarTitle: String,
+    viewModel2: ButtonViewModel,
 ) {
     val barPadding = 15.dp
+
 
     Row(
         modifier = Modifier
@@ -122,13 +125,13 @@ fun TopBar(
                 modifier = Modifier
                     .clickable(onClick = {
                         speakerPress = if (speakerPress == "on") "off" else "on"
-
+                        viewModel2.toggleButtonTwoState()
                     }
                     )
                     .padding(top = 4.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.volume_up),
+                    painter = painterResource(id = R.drawable.mic_button_400),
                     contentDescription = "camera",
                     Modifier
                         .scale(1f)
@@ -164,17 +167,6 @@ fun TopBar(
             }
             Spacer(Modifier.weight(1f))
 
-            Spacer(Modifier.weight(1f))
-            Text(
-                text = "Battery: " + 69 + "%",
-                fontSize = 16.sp
-            )
-            Spacer(Modifier.weight(1f))
-
-            Text(
-                text = "Lag: " + 12 + "ms",
-                fontSize = 16.sp
-            )
         }
     }
 }
