@@ -150,6 +150,14 @@ fun UserGuidePage(
                 ) {
                     Text("Trubleshooting")
                 }
+
+                Image(
+                    painter =  painterResource(id = R.drawable.aida_logo_new),
+                    contentDescription = "Example Image",
+                    modifier = Modifier
+                        .height(600.dp)
+                        .width(600.dp)
+                )
             }
         }
         VerticalDivider(
