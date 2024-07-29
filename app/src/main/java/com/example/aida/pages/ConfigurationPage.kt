@@ -1,11 +1,15 @@
 package com.example.aida.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,9 +27,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.aida.R
 import com.example.aida.viewmodels.MainViewModel
 
 /**
@@ -125,7 +133,7 @@ fun ConfigurationPage(
                     },
                 )
             }
-
+            """
             // Username & Password input, currently unused
             Row(
                 horizontalArrangement = Arrangement.spacedBy(rowSpacing)
@@ -149,6 +157,7 @@ fun ConfigurationPage(
                     modifier = standardInputModifier
                 )
             }
+            """
 
             // Button to confirm IP address and port
             Button(
@@ -167,6 +176,16 @@ fun ConfigurationPage(
             ) {
                 Text("Connect")
             }
+
+            Image(
+                painter = painterResource(id = R.drawable.aida_logo_new),
+                contentDescription = "Example Image",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 100.dp)
+                    .height(350.dp)
+                    .width(350.dp)
+            )
         }
 
         VerticalDivider(
@@ -177,16 +196,169 @@ fun ConfigurationPage(
             color = Color.Gray
         )
 
-        // Second column for the SSH Terminal, currently unused
+        // Column on the right side of the screen
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(top = paddingTop, start = paddingSides, end = paddingSides),
-            verticalArrangement = Arrangement.spacedBy(rowSpacing)
+                .fillMaxWidth()
+                .padding(top = 30.dp, bottom = 30.dp),
+            verticalArrangement = Arrangement.spacedBy(rowSpacing),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "SSH Terminal"
-            )
+            // Top row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                // Left column of top row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.hub_500_new),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "API-node",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.link_300),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = "PLACEHOLDER",
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.width(60.dp))
+
+                // Right column of top row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.lidar_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "LiDAR-node",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.link_300),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = "PLACEHOLDER",
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            // Bottom row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                // Left column of bottom row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.videocam_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "Camera-node",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.link_300),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = "PLACEHOLDER",
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.width(60.dp))
+
+                // Right column of bottom row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.hand_gesture_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "Image recognition-node",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.link_300),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = "PLACEHOLDER",
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
         }
     }
+
 }

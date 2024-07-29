@@ -218,7 +218,8 @@ class MainActivity : ComponentActivity() {
                             onButtonPress = {
                                 state = 0
                                 topBarTitle = "AIDA Remote Control Beta"
-                            }
+                            },
+                            activity = this,
                         )
                     }
                 }

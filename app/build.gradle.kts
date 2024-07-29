@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("androidx.media3:media3-ui:1.3.1")
 
+
     implementation ("androidx.media3:media3-common:1.3.1")
     implementation ("androidx.media3:media3-exoplayer:1.3.1")
     implementation ("androidx.media3:media3-exoplayer-hls:1.3.1")
@@ -89,5 +90,7 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences-rxjava2:1.1.1")
     implementation ("androidx.datastore:datastore-preferences-rxjava3:1.1.1")
     implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    implementation ("com.google.code.gson:gson:2.8.8")
 
 }

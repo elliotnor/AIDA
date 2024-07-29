@@ -1,0 +1,8 @@
+
+If there are issues with connecting to AIDA, it is recommended that the user first restart the application and the robot.Then, the problems are best investigated by following these steps:
+
+Are you trying to connect to the correct IP address and port? Connect a monitor and keyboard to the rpi5. Then log in with the username "aida" and password "aida9319". Execute the command "Hostname -I" and ensure that the listed IP address is the same. Also, make sure the port is set to 6662.
+
+Ensure that the AIDA network is up and running.
+
+Ensure that WIFI is enabled on the tablet.
