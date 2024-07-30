@@ -55,7 +55,6 @@ fun CameraPage(
     barHeight: Dp,
     screenWidth: Dp,
     viewModel: MainViewModel,
-    viewModel2: ButtonViewModel,
 ) {
     val widgetPadding = 40.dp
 
@@ -133,7 +132,7 @@ fun CameraPage(
                 .clip(CircleShape)
                 .clickable(
                     enabled = viewModel.sttConnectionStage.collectAsState().value
-                            == ConnectionStages.CONNECTION_SUCCEEDED && viewModel2.isButtonTwoEnabled.collectAsState().value,
+                            == ConnectionStages.CONNECTION_SUCCEEDED && viewModel.isButtonTwoEnabled.collectAsState().value,
                     onClick = {
                         viewModel.startVoiceRecording()
                     })

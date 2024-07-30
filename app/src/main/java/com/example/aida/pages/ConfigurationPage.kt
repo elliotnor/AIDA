@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -144,6 +147,26 @@ fun ConfigurationPage(
         }
 
 
+        // Joystick connection variables
+        var JoystickConnectedText by remember { mutableStateOf("Disconnected") }
+        var JoystickImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isJoystickConnected){
+            JoystickConnectedText = "Connected"
+            JoystickImageBoolean = true
+        }
+        else if(!viewModel.isJoystickConnected){
+            JoystickConnectedText = "Disconnected"
+            JoystickImageBoolean = false
+        }
+
+        val JoystickImage = if (JoystickImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+
 
         // First column for SSH Connection Data
         Column(
@@ -156,7 +179,13 @@ fun ConfigurationPage(
             var portInput by remember { mutableStateOf(viewModel.port.value.toString()) }
             val standardInputModifier = Modifier.weight(1f)
 
-            Text(text = "SSH Connection Data", modifier = Modifier.align(Alignment.Start))
+            Text(text = "SSH Connection Data",
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
 
             var isIpError by rememberSaveable { mutableStateOf(false) }
             var isPortError by rememberSaveable { mutableStateOf(false) }
@@ -249,6 +278,7 @@ fun ConfigurationPage(
                         viewModel.connectToAIDA()
                         onButtonPress()
                     }
+
                 },
                 modifier = Modifier
                     .padding(20.dp)
@@ -263,7 +293,7 @@ fun ConfigurationPage(
                 contentDescription = "Example Image",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 100.dp)
+                    .padding(top = 10.dp)
                     .height(350.dp)
                     .width(350.dp)
             )
@@ -277,11 +307,14 @@ fun ConfigurationPage(
             color = Color.Gray
         )
 
+
+        var scrollState = rememberScrollState()
         // Column on the right side of the screen
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 30.dp, bottom = 30.dp),
+                .padding(top = 30.dp, bottom = 30.dp)
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(rowSpacing),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -362,13 +395,13 @@ fun ConfigurationPage(
                     )
                 }
             }
-            // Bottom row
+            // Middle row
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Left column of bottom row
+                // Left column of middle row
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -404,7 +437,7 @@ fun ConfigurationPage(
                 }
                 Spacer(modifier = Modifier.width(60.dp))
 
-                // Right column of bottom row
+                // Right column of middle row
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -438,6 +471,50 @@ fun ConfigurationPage(
                         textAlign = TextAlign.Center
                     )
                 }
+            }
+            // Bottom row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                // Left column of bottom row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.joystick_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "Joystick",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = JoystickImage,
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = JoystickConnectedText,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.width(60.dp))
+
+
             }
         }
     }

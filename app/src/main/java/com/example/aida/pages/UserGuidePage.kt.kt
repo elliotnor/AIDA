@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
 
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 
 
 /**
@@ -91,7 +92,7 @@ fun UserGuidePage(
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
-                .padding(top = paddingTop, start = paddingSides, end = paddingSides),
+                .padding( start = paddingSides, end = paddingSides),
             verticalArrangement = Arrangement.spacedBy(rowSpacing)
         ) {
 
@@ -101,6 +102,15 @@ fun UserGuidePage(
                     .padding(top = paddingTop, start = paddingSides, end = paddingSides),
                 verticalArrangement = Arrangement.spacedBy(rowSpacing)
             ) {
+
+                Text(text = "User guide",
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp
+                )
+
+                Spacer(modifier = Modifier.height(25.dp))
+
                 // Button to confirm IP address and port
                 Button(
                     onClick = {
@@ -111,7 +121,7 @@ fun UserGuidePage(
 
                     },
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(0.8f)
                 ) {
