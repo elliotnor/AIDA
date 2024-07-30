@@ -64,6 +64,87 @@ fun ConfigurationPage(
         val rowSpacing = 10.dp
 
 
+
+
+
+        // Lidar connection variables
+        var lidarConnectedText by remember { mutableStateOf("Disconnected") }
+        var lidarImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isLidarConnected){
+            lidarConnectedText = "Connected"
+            lidarImageBoolean = true
+        }
+        else if(!viewModel.isLidarConnected){
+            lidarConnectedText = "Disconnected"
+            lidarImageBoolean = false
+        }
+
+        val lidarImage = if (lidarImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+        // STT connection variables
+        var STTConnectedText by remember { mutableStateOf("Disconnected") }
+        var STTImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isSTTConnected){
+            STTConnectedText = "Connected"
+            STTImageBoolean = true
+        }
+        else if(!viewModel.isSTTConnected){
+            STTConnectedText = "Disconnected"
+            STTImageBoolean = false
+        }
+
+        val STTImage = if (STTImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+        // Camera connection variables
+        var cameraConnectedText by remember { mutableStateOf("Disconnected") }
+        var cameraImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isCameraConnected){
+            cameraConnectedText = "Connected"
+            cameraImageBoolean = true
+        }
+        else if(!viewModel.isCameraConnected){
+            cameraConnectedText = "Disconnected"
+            cameraImageBoolean = false
+        }
+
+        val cameraImage = if (cameraImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+        // gesture connection variables
+        var gestureConnectedText by remember { mutableStateOf("Disconnected") }
+        var gestureImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isGestureConnected){
+            gestureConnectedText = "Connected"
+            gestureImageBoolean = true
+        }
+        else if(!viewModel.isGestureConnected){
+            gestureConnectedText = "Disconnected"
+            gestureImageBoolean = false
+        }
+
+        val gestureImage = if (gestureImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+
+
         // First column for SSH Connection Data
         Column(
             modifier = Modifier
@@ -219,19 +300,19 @@ fun ConfigurationPage(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.hub_500_new),
+                        painter = painterResource(id = R.drawable.mic_500),
                         contentDescription = "Example Image",
                         modifier = Modifier
                             .height(150.dp)
                             .width(150.dp)
                     )
                     Text(
-                        text = "API-node",
+                        text = "STT",
                         fontSize = 19.sp,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = painterResource(id = R.drawable.link_300),
+                        painter = STTImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
                             .height(50.dp)
@@ -239,7 +320,7 @@ fun ConfigurationPage(
                     )
 
                     Text(
-                        text = "PLACEHOLDER",
+                        text = STTConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
@@ -262,12 +343,12 @@ fun ConfigurationPage(
                             .width(150.dp)
                     )
                     Text(
-                        text = "LiDAR-node",
+                        text = "LiDAR",
                         fontSize = 19.sp,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = painterResource(id = R.drawable.link_300),
+                        painter = lidarImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
                             .height(50.dp)
@@ -275,7 +356,7 @@ fun ConfigurationPage(
                     )
 
                     Text(
-                        text = "PLACEHOLDER",
+                        text = lidarConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
@@ -303,12 +384,12 @@ fun ConfigurationPage(
                             .width(150.dp)
                     )
                     Text(
-                        text = "Camera-node",
+                        text = "Camera",
                         fontSize = 19.sp,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = painterResource(id = R.drawable.link_300),
+                        painter = cameraImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
                             .height(50.dp)
@@ -316,7 +397,7 @@ fun ConfigurationPage(
                     )
 
                     Text(
-                        text = "PLACEHOLDER",
+                        text = cameraConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
@@ -339,12 +420,12 @@ fun ConfigurationPage(
                             .width(150.dp)
                     )
                     Text(
-                        text = "Image recognition-node",
+                        text = "Image recognition",
                         fontSize = 19.sp,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = painterResource(id = R.drawable.link_300),
+                        painter = gestureImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
                             .height(50.dp)
@@ -352,7 +433,7 @@ fun ConfigurationPage(
                     )
 
                     Text(
-                        text = "PLACEHOLDER",
+                        text = gestureConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )

@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             var state by remember { mutableIntStateOf(0) }
             val scope = rememberCoroutineScope()
-            var viewModel2 = ButtonViewModel()
+            var buttonViewModel = ButtonViewModel()
 
             // Setup menu drawer
             ModalNavigationDrawer(
@@ -190,7 +190,7 @@ class MainActivity : ComponentActivity() {
                         onGestureClicked = { viewModel.toggleGestureFeed()},
                         barHeight = barHeight,
                         topBarTitle = topBarTitle,
-                        viewModel2 = viewModel2,
+                        viewModel2 = buttonViewModel,
                     )
 
                     // Main logic when switching between pages
@@ -200,7 +200,7 @@ class MainActivity : ComponentActivity() {
                             barHeight = barHeight,
                             screenWidth =screenWidth,
                             viewModel = viewModel,
-                            viewModel2 = viewModel2,
+                            viewModel2 = buttonViewModel,
 
                         )
 

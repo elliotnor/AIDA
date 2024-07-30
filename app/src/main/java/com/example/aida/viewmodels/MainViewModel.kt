@@ -194,6 +194,12 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     // Image bitmap for lidar
     val lidarImageBitmap: StateFlow<ImageBitmap?> = _lidarImageBitmap.asStateFlow()
 
+    //Boolean to see if nodes are connected
+    var isLidarConnected = false
+    var isSTTConnected = false
+    var isCameraConnected = false
+    var isGestureConnected = false
+
     /**
     * Toggles the camera feed on and off
     * If the camera feed is on, it will close the connection to server and turn of
@@ -208,10 +214,12 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                         videoClient.stop()
                         _videoBitmap.value = null
                         _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_CLOSED
+                        isCameraConnected = false
                     }
                     catch (e: Exception){
                         _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
                         println("Can't close video: $e")
+                        isCameraConnected = false
                     }
 
                 }
@@ -231,10 +239,12 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 try {
                     gestureClient.sendStopGesture()
                     _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_CLOSED
+                    isGestureConnected = false
                 }
                 catch (e: Exception){
                     _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
                     println("Can't close gesture: $e")
+                    isGestureConnected = false
                 }
             }
             print(_gestureFeedConnectionStage.value)
@@ -284,6 +294,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 videoClient.sendGetVideo()
                 _videoBitmap.value = videoClient.receiveVideoData()
                 _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isCameraConnected = true
 
                 while (_cameraFeedConnectionStage.value == ConnectionStages.CONNECTION_SUCCEEDED) {
                     _videoBitmap.value = videoClient.receiveVideoData()
@@ -294,6 +305,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 // connection stage to closed, else set to failed.
                 if (_cameraFeedConnectionStage.value != ConnectionStages.CONNECTION_CLOSED)
                     _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isCameraConnected = false
             }
         }
     }
@@ -308,12 +320,14 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 )
                 gestureClient.sendStartGesture()
                 _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isGestureConnected = true
             } catch (e: Exception) {
                 println("Can't Connect to Gesture: ")
                 // If we close the gesture - we fetch from a closed connection. Set the
                 // connection stage to closed, else set to failed.
                 if (_gestureFeedConnectionStage.value != ConnectionStages.CONNECTION_CLOSED)
                     _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isCameraConnected = false
             }
         }
 
@@ -333,9 +347,11 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 sttClient.sendStartSTT()
 
                 _sttConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isSTTConnected = true
             } catch (e: Exception) {
                 println("Can't connect to STT: $e")
                 _sttConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isSTTConnected = false
             }
         }
     }
@@ -355,12 +371,16 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 lidarClient.sentRequestLidarData()
                 _lidarImageBitmap.value = lidarClient.receiveLidarData()
                 _lidarConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+
                 while (true) {
                     _lidarImageBitmap.value = lidarClient.receiveLidarData()
+                    isLidarConnected = true
                 }
             } catch (e: Exception) {
                 println("Can't connect to Lidar: $e")
+
                 _lidarConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isLidarConnected = false
             }
         }
     }
