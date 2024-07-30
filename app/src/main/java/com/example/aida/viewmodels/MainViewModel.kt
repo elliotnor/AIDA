@@ -199,6 +199,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     var isSTTConnected = false
     var isCameraConnected = false
     var isGestureConnected = false
+    var isJoystickConnected = false
 
     /**
     * Toggles the camera feed on and off
@@ -265,17 +266,21 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
      */
     fun connectToAIDA(ip: String = ipAddress.value, prt: Int = port.value) {
         viewModelScope.launch(Dispatchers.IO) {
-            _cameraFeedConnectionStage.value = ConnectionStages.CONNECTING
-            _lidarConnectionStage.value = ConnectionStages.CONNECTING
-            _sttConnectionStage.value = ConnectionStages.CONNECTING
-            _joystickConnectionStage.value = ConnectionStages.CONNECTING
-            _gestureFeedConnectionStage.value = ConnectionStages.CONNECTING
 
-            connectToSTT(ip, prt)
-            connectToVideo(ip, prt)
-            connectToLidar(ip, prt)
-            connectToJoystick(ip, prt)
-            connectToGesture(ip, prt)
+                _cameraFeedConnectionStage.value = ConnectionStages.CONNECTING
+                _lidarConnectionStage.value = ConnectionStages.CONNECTING
+                _sttConnectionStage.value = ConnectionStages.CONNECTING
+                _joystickConnectionStage.value = ConnectionStages.CONNECTING
+                _gestureFeedConnectionStage.value = ConnectionStages.CONNECTING
+
+                connectToSTT(ip, prt)
+                connectToVideo(ip, prt)
+                connectToLidar(ip, prt)
+                connectToJoystick(ip, prt)
+                connectToGesture(ip, prt)
+
+
+
         }
     }
 
@@ -356,6 +361,8 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
         }
     }
 
+
+
     /**
      * Connects to the Lidar client and starts receiving Lidar data
      */
@@ -397,9 +404,11 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                     timeToTimeout = 5000
                 )
                 _joystickConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isJoystickConnected = true
             } catch (e: Exception) {
                 println("Can't connect to Lidar: $e")
                 _joystickConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isJoystickConnected = false
             }
         }
     }
@@ -417,5 +426,18 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
         } catch (e: Exception) {
             println("Error when closing: $e")
         }
+    }
+
+    private val _isButtonTwoEnabled = MutableStateFlow(true)
+    val isButtonTwoEnabled: StateFlow<Boolean> = _isButtonTwoEnabled
+
+    fun toggleButtonTwoState() {
+        if(_isButtonTwoEnabled.value){
+            isSTTConnected = false
+        }
+        else{
+            isSTTConnected = true
+        }
+        _isButtonTwoEnabled.value = !_isButtonTwoEnabled.value
     }
 }

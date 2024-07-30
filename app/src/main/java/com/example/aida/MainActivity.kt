@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.aida.pages.CameraPage
 import com.example.aida.pages.ConfigurationPage
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             var state by remember { mutableIntStateOf(0) }
             val scope = rememberCoroutineScope()
-            var buttonViewModel = ButtonViewModel()
+
 
             // Setup menu drawer
             ModalNavigationDrawer(
@@ -190,7 +191,7 @@ class MainActivity : ComponentActivity() {
                         onGestureClicked = { viewModel.toggleGestureFeed()},
                         barHeight = barHeight,
                         topBarTitle = topBarTitle,
-                        viewModel2 = buttonViewModel,
+                        viewModel = viewModel,
                     )
 
                     // Main logic when switching between pages
@@ -200,7 +201,6 @@ class MainActivity : ComponentActivity() {
                             barHeight = barHeight,
                             screenWidth =screenWidth,
                             viewModel = viewModel,
-                            viewModel2 = buttonViewModel,
 
                         )
 

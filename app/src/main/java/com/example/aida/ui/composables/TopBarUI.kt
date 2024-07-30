@@ -24,9 +24,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.example.aida.R
 import com.example.aida.ui.theme.TopBarColor
 import com.example.aida.viewmodels.ButtonViewModel
+import com.example.aida.viewmodels.MainViewModel
 
 /**
  * Function for the top bar, contains both UI and logic, however some
@@ -45,7 +47,7 @@ fun TopBar(
     onGestureClicked: ()->Unit,
     barHeight: Dp,
     topBarTitle: String,
-    viewModel2: ButtonViewModel,
+    viewModel: MainViewModel,
 ) {
     val barPadding = 15.dp
 
@@ -125,7 +127,7 @@ fun TopBar(
                 modifier = Modifier
                     .clickable(onClick = {
                         speakerPress = if (speakerPress == "on") "off" else "on"
-                        viewModel2.toggleButtonTwoState()
+                        viewModel.toggleButtonTwoState()
                     }
                     )
                     .padding(top = 4.dp)
