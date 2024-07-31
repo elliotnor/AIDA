@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun AppContent(viewModel: MainViewModel) {
         AIDATheme {
-            var topBarTitle by remember { mutableStateOf("AIDA Remote Control Beta") }
+            var topBarTitle by remember { mutableStateOf("AIDA Remote Control") }
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             var state by remember { mutableIntStateOf(0) }
             val scope = rememberCoroutineScope()
@@ -116,7 +116,6 @@ class MainActivity : ComponentActivity() {
                                 scope.launch {
                                     drawerState.close()
                                 }
-                                topBarTitle = "AIDA Remote Control Application"
                             }
                         )
                         NavigationDrawerItem(
@@ -209,7 +208,7 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel,
                             onButtonPress = {
                                 state = 0
-                                topBarTitle = "AIDA Remote Control Beta"
+
                             }
                         )
                         2 -> UserGuidePage(
@@ -217,7 +216,6 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel,
                             onButtonPress = {
                                 state = 0
-                                topBarTitle = "AIDA Remote Control Beta"
                             },
                             activity = this,
                         )
