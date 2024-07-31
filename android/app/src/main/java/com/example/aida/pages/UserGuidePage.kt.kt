@@ -43,8 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 
 
@@ -75,15 +79,24 @@ fun UserGuidePage(
         val paddingTop = 20.dp
         val paddingSides = 30.dp
         val rowSpacing = 10.dp
-        var textfield1 by remember { mutableStateOf("") }
-        var textfield2 by remember { mutableStateOf("") }
+        var pictureScale by remember { mutableStateOf(700.dp) }
+        var textfield1 by remember { mutableStateOf("Connection guide") }
+        var textfield2 by remember { mutableStateOf(readRawResource(activity, R.raw.connection_guide)) }
 
         var image1 by remember { mutableStateOf(false) }
-        val painter = if (image1) {
-            painterResource(id = R.drawable.aida_homepage)
-        } else {
-            painterResource(id = R.drawable.white)
+        var painter1 = painterResource(id = R.drawable.white)
+        var painter2 = painterResource(id = R.drawable.white)
+        if(image1){
+            painter1 = painterResource(id = R.drawable.aida_demo_new_new)
+            painter2 = painterResource(id = R.drawable.aida_demo_connection)
+            pictureScale = 400.dp
         }
+        else{
+            painter1 = painterResource(id = R.drawable.white)
+            painter2 = painterResource(id = R.drawable.white)
+            pictureScale = 1.dp
+        }
+
 
 
 
@@ -106,8 +119,10 @@ fun UserGuidePage(
                 Text(text = "User guide",
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
+                    fontSize = 25.sp,
+                    fontFamily = FontFamily.SansSerif
                 )
+
 
                 Spacer(modifier = Modifier.height(25.dp))
 
@@ -115,7 +130,7 @@ fun UserGuidePage(
                 Button(
                     onClick = {
                         val jsonContent = readRawResource(activity, R.raw.connection_guide)
-                        textfield1 = "Start of AIDA"
+                        textfield1 = "Connection guide"
                         textfield2 = jsonContent
                         image1 = false
 
@@ -148,7 +163,7 @@ fun UserGuidePage(
                 Button(
                     onClick = {
                         val jsonContent = readRawResource(activity, R.raw.trouble_shooting)
-                        textfield1 = "Trubleshooting of AIDA"
+                        textfield1 = "Trubleshooting"
                         textfield2 = jsonContent
                         image1 = false
 
@@ -178,31 +193,47 @@ fun UserGuidePage(
             color = Color.Gray
         )
 
+        var scrollState = rememberScrollState()
+
         // Second column for the SSH Terminal, currently unused
         Column(
             modifier = Modifier
-                .padding(top = paddingTop, start = paddingSides, end = paddingSides),
+                .padding(top = paddingTop, start = 100.dp, end = 100.dp)
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(rowSpacing)
         ) {
+
             Text(
                 text = textfield1,
-                fontSize = 24.sp // Adjust the size as needed
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                fontFamily = FontFamily.SansSerif
+
             )
+            Image(
+                painter =  painter1,
+                contentDescription = "Example Image",
+                modifier = Modifier
+                    .height(pictureScale)
+                    .width(pictureScale)
+            )
+            Image(
+                painter =  painter2,
+                contentDescription = "Example Image",
+                modifier = Modifier
+                    .height(pictureScale)
+                    .width(pictureScale)
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
 
 
             Text(
-                text = textfield2
+                text = textfield2,
+                fontFamily = FontFamily.Monospace
             )
-
-            Image(
-                painter =  painter,
-                contentDescription = "Example Image",
-                modifier = Modifier
-                    .height(700.dp)
-                    .width(700.dp)
-            )
-
-
 
         }
     }

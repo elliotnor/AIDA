@@ -149,7 +149,7 @@ class MainActivity : ComponentActivity() {
                                 scope.launch {
                                     drawerState.close()
                                 }
-                                topBarTitle = "Userguide"
+                                topBarTitle = "User guide"
                             }
                         )
                         Spacer(modifier = Modifier.weight(1f))
