@@ -1,14 +1,20 @@
 package com.example.aida.pages
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,9 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.aida.R
 import com.example.aida.viewmodels.MainViewModel
 
 /**
@@ -56,6 +67,107 @@ fun ConfigurationPage(
         val rowSpacing = 10.dp
 
 
+
+
+
+        // Lidar connection variables
+        var lidarConnectedText by remember { mutableStateOf("Disconnected") }
+        var lidarImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isLidarConnected){
+            lidarConnectedText = "Connected"
+            lidarImageBoolean = true
+        }
+        else if(!viewModel.isLidarConnected){
+            lidarConnectedText = "Disconnected"
+            lidarImageBoolean = false
+        }
+
+        val lidarImage = if (lidarImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+        // STT connection variables
+        var STTConnectedText by remember { mutableStateOf("Disconnected") }
+        var STTImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isSTTConnected){
+            STTConnectedText = "Connected"
+            STTImageBoolean = true
+        }
+        else if(!viewModel.isSTTConnected){
+            STTConnectedText = "Disconnected"
+            STTImageBoolean = false
+        }
+
+        val STTImage = if (STTImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+        // Camera connection variables
+        var cameraConnectedText by remember { mutableStateOf("Disconnected") }
+        var cameraImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isCameraConnected){
+            cameraConnectedText = "Connected"
+            cameraImageBoolean = true
+        }
+        else if(!viewModel.isCameraConnected){
+            cameraConnectedText = "Disconnected"
+            cameraImageBoolean = false
+        }
+
+        val cameraImage = if (cameraImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+        // gesture connection variables
+        var gestureConnectedText by remember { mutableStateOf("Disconnected") }
+        var gestureImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isGestureConnected){
+            gestureConnectedText = "Connected"
+            gestureImageBoolean = true
+        }
+        else if(!viewModel.isGestureConnected){
+            gestureConnectedText = "Disconnected"
+            gestureImageBoolean = false
+        }
+
+        val gestureImage = if (gestureImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+
+        // Joystick connection variables
+        var JoystickConnectedText by remember { mutableStateOf("Disconnected") }
+        var JoystickImageBoolean by remember { mutableStateOf(false) }
+
+        if(viewModel.isJoystickConnected){
+            JoystickConnectedText = "Connected"
+            JoystickImageBoolean = true
+        }
+        else if(!viewModel.isJoystickConnected){
+            JoystickConnectedText = "Disconnected"
+            JoystickImageBoolean = false
+        }
+
+        val JoystickImage = if (JoystickImageBoolean) {
+            painterResource(id = R.drawable.link_300)
+        } else {
+            painterResource(id = R.drawable.link_off_300)
+        }
+
+
+
         // First column for SSH Connection Data
         Column(
             modifier = Modifier
@@ -67,7 +179,13 @@ fun ConfigurationPage(
             var portInput by remember { mutableStateOf(viewModel.port.value.toString()) }
             val standardInputModifier = Modifier.weight(1f)
 
-            Text(text = "SSH Connection Data", modifier = Modifier.align(Alignment.Start))
+            Text(text = "SSH Connection Data",
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
 
             var isIpError by rememberSaveable { mutableStateOf(false) }
             var isPortError by rememberSaveable { mutableStateOf(false) }
@@ -125,7 +243,7 @@ fun ConfigurationPage(
                     },
                 )
             }
-
+            """
             // Username & Password input, currently unused
             Row(
                 horizontalArrangement = Arrangement.spacedBy(rowSpacing)
@@ -149,6 +267,7 @@ fun ConfigurationPage(
                     modifier = standardInputModifier
                 )
             }
+            """
 
             // Button to confirm IP address and port
             Button(
@@ -159,6 +278,7 @@ fun ConfigurationPage(
                         viewModel.connectToAIDA()
                         onButtonPress()
                     }
+
                 },
                 modifier = Modifier
                     .padding(20.dp)
@@ -167,6 +287,16 @@ fun ConfigurationPage(
             ) {
                 Text("Connect")
             }
+
+            Image(
+                painter = painterResource(id = R.drawable.aida_logo_new),
+                contentDescription = "Example Image",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 10.dp)
+                    .height(350.dp)
+                    .width(350.dp)
+            )
         }
 
         VerticalDivider(
@@ -177,16 +307,216 @@ fun ConfigurationPage(
             color = Color.Gray
         )
 
-        // Second column for the SSH Terminal, currently unused
+
+        var scrollState = rememberScrollState()
+        // Column on the right side of the screen
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(top = paddingTop, start = paddingSides, end = paddingSides),
-            verticalArrangement = Arrangement.spacedBy(rowSpacing)
+                .fillMaxWidth()
+                .padding(top = 30.dp, bottom = 30.dp)
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(rowSpacing),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "SSH Terminal"
-            )
+            // Top row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                // Left column of top row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.mic_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "STT",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = STTImage,
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = STTConnectedText,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.width(60.dp))
+
+                // Right column of top row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.lidar_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "LiDAR",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = lidarImage,
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = lidarConnectedText,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            // Middle row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                // Left column of middle row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.videocam_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "Camera",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = cameraImage,
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = cameraConnectedText,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.width(60.dp))
+
+                // Right column of middle row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.hand_gesture_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "Image recognition",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = gestureImage,
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = gestureConnectedText,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            // Bottom row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                // Left column of bottom row
+                Column(
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = 30.dp)
+                        .width(250.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.joystick_500),
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(150.dp)
+                            .width(150.dp)
+                    )
+                    Text(
+                        text = "Joystick",
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        painter = JoystickImage,
+                        contentDescription = "Example Image",
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(50.dp)
+                    )
+
+                    Text(
+                        text = JoystickConnectedText,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.width(60.dp))
+
+
+            }
         }
     }
+
 }

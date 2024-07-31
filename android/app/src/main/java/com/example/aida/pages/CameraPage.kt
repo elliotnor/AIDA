@@ -30,6 +30,7 @@ import com.example.aida.ui.composables.Joystick
 import com.example.aida.ui.composables.Lidar
 import com.example.aida.ui.composables.RecordVoiceButton
 import com.example.aida.ui.composables.VoiceCommandBox
+import com.example.aida.viewmodels.ButtonViewModel
 import com.example.aida.viewmodels.MainViewModel
 
 /**
@@ -131,10 +132,11 @@ fun CameraPage(
                 .clip(CircleShape)
                 .clickable(
                     enabled = viewModel.sttConnectionStage.collectAsState().value
-                            == ConnectionStages.CONNECTION_SUCCEEDED,
+                            == ConnectionStages.CONNECTION_SUCCEEDED && viewModel.isButtonTwoEnabled.collectAsState().value,
                     onClick = {
                         viewModel.startVoiceRecording()
                     })
         )
+
     }
 }

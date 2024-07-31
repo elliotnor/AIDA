@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aida.enums.ConnectionStages
+import com.example.aida.socketcommunication.GestureClient
 import com.example.aida.socketcommunication.JoystickClient
 import com.example.aida.socketcommunication.LidarClient
 import com.example.aida.socketcommunication.STTClient
@@ -95,6 +96,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     private lateinit var videoClient: VideoClient
     private lateinit var lidarClient: LidarClient
     private lateinit var joystickClient: JoystickClient
+    private lateinit var gestureClient: GestureClient
 
     // Speech to text variables
     private val _voiceCommand = MutableLiveData<String>()
@@ -173,6 +175,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     private val _lidarConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     private val _sttConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     private val _joystickConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
+    private val _gestureFeedConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     // Image bitmap for camera feed
     private val _videoBitmap = MutableStateFlow<ImageBitmap?>(null)
     // Image bitmap for lidar
@@ -184,10 +187,19 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     val sttConnectionStage: StateFlow<ConnectionStages> = _sttConnectionStage.asStateFlow()
     val joystickConnectionStage: StateFlow<ConnectionStages> =
         _joystickConnectionStage.asStateFlow()
+    val gestureFeedConnectionStage: StateFlow<ConnectionStages> =
+        _gestureFeedConnectionStage.asStateFlow()
     // Image bitmap for camera feed
     val videoBitmap: StateFlow<ImageBitmap?> = _videoBitmap.asStateFlow()
     // Image bitmap for lidar
     val lidarImageBitmap: StateFlow<ImageBitmap?> = _lidarImageBitmap.asStateFlow()
+
+    //Boolean to see if nodes are connected
+    var isLidarConnected = false
+    var isSTTConnected = false
+    var isCameraConnected = false
+    var isGestureConnected = false
+    var isJoystickConnected = false
 
     /**
     * Toggles the camera feed on and off
@@ -203,10 +215,12 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                         videoClient.stop()
                         _videoBitmap.value = null
                         _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_CLOSED
+                        isCameraConnected = false
                     }
                     catch (e: Exception){
                         _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
                         println("Can't close video: $e")
+                        isCameraConnected = false
                     }
 
                 }
@@ -219,6 +233,31 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 }
             }
     }
+
+    fun toggleGestureFeed(){
+        if (_gestureFeedConnectionStage.value == ConnectionStages.CONNECTION_SUCCEEDED){
+            viewModelScope.launch (Dispatchers.IO){
+                try {
+                    gestureClient.sendStopGesture()
+                    _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_CLOSED
+                    isGestureConnected = false
+                }
+                catch (e: Exception){
+                    _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                    println("Can't close gesture: $e")
+                    isGestureConnected = false
+                }
+            }
+            print(_gestureFeedConnectionStage.value)
+        }
+        else if (_gestureFeedConnectionStage.value == ConnectionStages.CONNECTION_CLOSED){
+            viewModelScope.launch (Dispatchers.IO){
+                _gestureFeedConnectionStage.value = ConnectionStages.CONNECTING
+                connectToGesture(ipAddress.value, port.value)
+            }
+        }
+
+    }
     /**
     * Connects to AIDA API with all clients
     * @param ip the ip address of the server
@@ -227,15 +266,21 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
      */
     fun connectToAIDA(ip: String = ipAddress.value, prt: Int = port.value) {
         viewModelScope.launch(Dispatchers.IO) {
-            _cameraFeedConnectionStage.value = ConnectionStages.CONNECTING
-            _lidarConnectionStage.value = ConnectionStages.CONNECTING
-            _sttConnectionStage.value = ConnectionStages.CONNECTING
-            _joystickConnectionStage.value = ConnectionStages.CONNECTING
 
-            connectToSTT(ip, prt)
-            connectToVideo(ip, prt)
-            connectToLidar(ip, prt)
-            connectToJoystick(ip, prt)
+                _cameraFeedConnectionStage.value = ConnectionStages.CONNECTING
+                _lidarConnectionStage.value = ConnectionStages.CONNECTING
+                _sttConnectionStage.value = ConnectionStages.CONNECTING
+                _joystickConnectionStage.value = ConnectionStages.CONNECTING
+                _gestureFeedConnectionStage.value = ConnectionStages.CONNECTING
+
+                connectToSTT(ip, prt)
+                connectToVideo(ip, prt)
+                connectToLidar(ip, prt)
+                connectToJoystick(ip, prt)
+                connectToGesture(ip, prt)
+
+
+
         }
     }
 
@@ -254,6 +299,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 videoClient.sendGetVideo()
                 _videoBitmap.value = videoClient.receiveVideoData()
                 _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isCameraConnected = true
 
                 while (_cameraFeedConnectionStage.value == ConnectionStages.CONNECTION_SUCCEEDED) {
                     _videoBitmap.value = videoClient.receiveVideoData()
@@ -264,9 +310,34 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 // connection stage to closed, else set to failed.
                 if (_cameraFeedConnectionStage.value != ConnectionStages.CONNECTION_CLOSED)
                     _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isCameraConnected = false
             }
         }
     }
+
+    private fun connectToGesture(ip: String, prt: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                gestureClient = GestureClient(
+                    ip = ip,
+                    port = prt,
+                    timeToTimeout = 10000
+                )
+                gestureClient.sendStartGesture()
+                _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isGestureConnected = true
+            } catch (e: Exception) {
+                println("Can't Connect to Gesture: ")
+                // If we close the gesture - we fetch from a closed connection. Set the
+                // connection stage to closed, else set to failed.
+                if (_gestureFeedConnectionStage.value != ConnectionStages.CONNECTION_CLOSED)
+                    _gestureFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isCameraConnected = false
+            }
+        }
+
+    }
+
     /**
     * Connects the STT client to the server
      */
@@ -281,12 +352,16 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 sttClient.sendStartSTT()
 
                 _sttConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isSTTConnected = true
             } catch (e: Exception) {
                 println("Can't connect to STT: $e")
-                _cameraFeedConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                _sttConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isSTTConnected = false
             }
         }
     }
+
+
 
     /**
      * Connects to the Lidar client and starts receiving Lidar data
@@ -303,12 +378,16 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 lidarClient.sentRequestLidarData()
                 _lidarImageBitmap.value = lidarClient.receiveLidarData()
                 _lidarConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+
                 while (true) {
                     _lidarImageBitmap.value = lidarClient.receiveLidarData()
+                    isLidarConnected = true
                 }
             } catch (e: Exception) {
                 println("Can't connect to Lidar: $e")
+
                 _lidarConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isLidarConnected = false
             }
         }
     }
@@ -325,9 +404,11 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                     timeToTimeout = 5000
                 )
                 _joystickConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
+                isJoystickConnected = true
             } catch (e: Exception) {
                 println("Can't connect to Lidar: $e")
                 _joystickConnectionStage.value = ConnectionStages.CONNECTION_FAILED
+                isJoystickConnected = false
             }
         }
     }
@@ -341,8 +422,22 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
             videoClient.stop()
             lidarClient.stop()
             joystickClient.stop()
+
         } catch (e: Exception) {
             println("Error when closing: $e")
         }
+    }
+
+    private val _isButtonTwoEnabled = MutableStateFlow(true)
+    val isButtonTwoEnabled: StateFlow<Boolean> = _isButtonTwoEnabled
+
+    fun toggleButtonTwoState() {
+        if(_isButtonTwoEnabled.value){
+            isSTTConnected = false
+        }
+        else{
+            isSTTConnected = true
+        }
+        _isButtonTwoEnabled.value = !_isButtonTwoEnabled.value
     }
 }

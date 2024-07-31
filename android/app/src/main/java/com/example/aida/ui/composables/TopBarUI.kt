@@ -24,8 +24,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.example.aida.R
 import com.example.aida.ui.theme.TopBarColor
+import com.example.aida.viewmodels.ButtonViewModel
+import com.example.aida.viewmodels.MainViewModel
 
 /**
  * Function for the top bar, contains both UI and logic, however some
@@ -41,10 +44,13 @@ import com.example.aida.ui.theme.TopBarColor
 fun TopBar(
     onMenuClicked: () -> Unit,
     onCameraClicked: () -> Unit,
+    onGestureClicked: ()->Unit,
     barHeight: Dp,
     topBarTitle: String,
+    viewModel: MainViewModel,
 ) {
     val barPadding = 15.dp
+
 
     Row(
         modifier = Modifier
@@ -61,7 +67,7 @@ fun TopBar(
                 .weight(1f)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.configuration_button),
+                painter = painterResource(id = R.drawable.menu_icon),
                 contentDescription = "configuration",
                 Modifier
                     .clickable(onClick = onMenuClicked)
@@ -88,23 +94,25 @@ fun TopBar(
         ) {
             var cameraPress by remember { mutableStateOf("on") }
             var speakerPress by remember { mutableStateOf("on") }
+            var gesturePress by remember { mutableStateOf("on") }
 
             Spacer(Modifier.weight(5f))
 
             Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .clickable(onClick = {
                         cameraPress = if (cameraPress == "on") "off" else "on"
                         onCameraClicked()
                     }
                     )
-                    .padding(top = 10.dp)
+                    .padding(top = 4.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.camera_button),
+                    painter = painterResource(id = R.drawable.videocam),
                     contentDescription = "camera",
                     Modifier
-                        .scale(1.2f)
+                        .scale(1f)
                 )
                 Text(
                     text = cameraPress,
@@ -119,16 +127,16 @@ fun TopBar(
                 modifier = Modifier
                     .clickable(onClick = {
                         speakerPress = if (speakerPress == "on") "off" else "on"
-
+                        viewModel.toggleButtonTwoState()
                     }
                     )
-                    .padding(top = 10.dp)
+                    .padding(top = 4.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.volume_button),
+                    painter = painterResource(id = R.drawable.mic_button_400),
                     contentDescription = "camera",
                     Modifier
-                        .scale(1.2f)
+                        .scale(1f)
                 )
                 Text(
                     text = speakerPress,
@@ -137,16 +145,30 @@ fun TopBar(
                 )
             }
             Spacer(Modifier.weight(1f))
-            Text(
-                text = "Battery: " + 69 + "%",
-                fontSize = 16.sp
-            )
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier
+                    .clickable(onClick = {
+                        gesturePress = if (gesturePress == "on") "off" else "on"
+                        onGestureClicked()
+                    }
+                    )
+                    .padding(top = 4.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.hand_gesture),
+                    contentDescription = "gesture",
+                    Modifier
+                        .scale(1f)
+                )
+                Text(
+                    text = gesturePress,
+                    Modifier
+                        .offset(y = (-2).dp)
+                )
+            }
             Spacer(Modifier.weight(1f))
 
-            Text(
-                text = "Lag: " + 12 + "ms",
-                fontSize = 16.sp
-            )
         }
     }
 }
