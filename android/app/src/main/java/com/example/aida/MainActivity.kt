@@ -49,6 +49,14 @@ import com.example.aida.viewmodels.ButtonViewModel
 import com.example.aida.viewmodels.MainViewModelFactory
 import kotlinx.coroutines.launch
 
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.aida.viewmodels.SplashScreen
+
+
 /**
  * MainActivity for application. Displays a top bar that contains a menu
  * and different widgets as well as the main application. The main switches
@@ -73,15 +81,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            val context = LocalContext.current
-            val dataStore = context.dataStore
-            viewModel = viewModel(factory = MainViewModelFactory(dataStore))
-
-            // Display UI
-            AppContent(viewModel)
+            AIDATheme {
+                MyAppNavHost()
+            }
         }
+        print("Hello")
     }
 
     // Not guaranteed to be called according to android docs
@@ -222,6 +227,42 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    fun MyAppNavHost(navController: NavHostController = rememberNavController()) {
+        NavHost(navController = navController, startDestination = "splash") {
+            composable("splash") {
+                SplashScreen(navigateToMain = {
+                    navController.navigate("main") {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                })
+            }
+            composable("main") {
+                MainScreen()
+            }
+        }
+    }
+
+    @Composable
+    fun MainScreen() {
+        setContent {
+            val context = LocalContext.current
+            val dataStore = context.dataStore
+            viewModel = viewModel(factory = MainViewModelFactory(dataStore))
+
+            // Display UI
+            AppContent(viewModel)
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        AIDATheme {
+            MyAppNavHost()
         }
     }
 }
