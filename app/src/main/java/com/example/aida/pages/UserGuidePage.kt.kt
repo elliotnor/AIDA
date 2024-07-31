@@ -75,12 +75,12 @@ fun UserGuidePage(
         val paddingTop = 20.dp
         val paddingSides = 30.dp
         val rowSpacing = 10.dp
-        var textfield1 by remember { mutableStateOf("") }
-        var textfield2 by remember { mutableStateOf("") }
+        var textfield1 by remember { mutableStateOf("Start of AIDA") }
+        var textfield2 by remember { mutableStateOf(readRawResource(activity, R.raw.connection_guide)) }
 
         var image1 by remember { mutableStateOf(false) }
         val painter = if (image1) {
-            painterResource(id = R.drawable.aida_homepage)
+            painterResource(id = R.drawable.aida_demo_new)
         } else {
             painterResource(id = R.drawable.white)
         }
@@ -186,8 +186,12 @@ fun UserGuidePage(
         ) {
             Text(
                 text = textfield1,
-                fontSize = 24.sp // Adjust the size as needed
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp
             )
+
+            Spacer(modifier = Modifier.height(5.dp))
 
 
             Text(
