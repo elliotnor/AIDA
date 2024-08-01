@@ -100,9 +100,11 @@ class MainActivity : ComponentActivity() {
     fun AppContent(viewModel: MainViewModel) {
         AIDATheme {
             var topBarTitle by remember { mutableStateOf("AIDA Remote Control") }
+            var resetState by remember  {mutableStateOf(false)}
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             var state by remember { mutableIntStateOf(0) }
             val scope = rememberCoroutineScope()
+
 
 
             // Setup menu drawer
@@ -121,6 +123,7 @@ class MainActivity : ComponentActivity() {
                                 scope.launch {
                                     drawerState.close()
                                 }
+                                topBarTitle = "AIDA Remote Control"
                             }
                         )
                         NavigationDrawerItem(
@@ -130,14 +133,14 @@ class MainActivity : ComponentActivity() {
                                     contentDescription = "Settings"
                                 )
                             },
-                            label = { Text(text = "Connection settings") },
+                            label = { Text(text = "Connection Settings") },
                             selected = false,
                             onClick = {
                                 state = 1
                                 scope.launch {
                                     drawerState.close()
                                 }
-                                topBarTitle = "Connection settings"
+                                topBarTitle = "Connection Settings"
                             }
                         )
                         NavigationDrawerItem(
@@ -147,14 +150,14 @@ class MainActivity : ComponentActivity() {
                                     contentDescription = "User Guide"
                                 )
                             },
-                            label = { Text(text = "User guide") },
+                            label = { Text(text = "User Guide") },
                             selected = false,
                             onClick = {
                                 state = 2
                                 scope.launch {
                                     drawerState.close()
                                 }
-                                topBarTitle = "User guide"
+                                topBarTitle = "User Guide"
                             }
                         )
                         Spacer(modifier = Modifier.weight(1f))
@@ -180,10 +183,12 @@ class MainActivity : ComponentActivity() {
                     val screenHeight = configuration.screenHeightDp.dp
                     val screenWidth = configuration.screenWidthDp.dp
 
+
+
                     // Dynamically set bar height depending on phone/tablet
                     val barHeight = if (screenHeight / 8 < 50.dp) screenHeight / 6 else 50.dp
 
-                    TopBar(
+                    val topbar = TopBar(
                         onMenuClicked = {
                             scope.launch {
                                 drawerState.apply {
@@ -196,6 +201,8 @@ class MainActivity : ComponentActivity() {
                         barHeight = barHeight,
                         topBarTitle = topBarTitle,
                         viewModel = viewModel,
+                        resetState = resetState,
+                        onResetState = {resetState = false},
                     )
 
                     // Main logic when switching between pages
@@ -213,6 +220,8 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel,
                             onButtonPress = {
                                 state = 0
+                                topBarTitle = "AIDA Remote Control"
+                                resetState = true
 
                             }
                         )

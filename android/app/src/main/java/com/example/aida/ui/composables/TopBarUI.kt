@@ -48,7 +48,10 @@ fun TopBar(
     barHeight: Dp,
     topBarTitle: String,
     viewModel: MainViewModel,
+    resetState: Boolean,
+    onResetState: ()->Unit,
 ) {
+
     val barPadding = 15.dp
 
 
@@ -95,6 +98,14 @@ fun TopBar(
             var cameraPress by remember { mutableStateOf("on") }
             var speakerPress by remember { mutableStateOf("on") }
             var gesturePress by remember { mutableStateOf("on") }
+
+            print(resetState)
+            if(resetState){
+                cameraPress = "on"
+                speakerPress = "on"
+                gesturePress = "on"
+                onResetState()
+            }
 
             Spacer(Modifier.weight(5f))
 
@@ -171,4 +182,8 @@ fun TopBar(
 
         }
     }
+}
+
+fun reset(){
+
 }
