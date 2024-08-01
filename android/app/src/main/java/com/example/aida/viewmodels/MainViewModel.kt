@@ -379,7 +379,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
                 _lidarImageBitmap.value = lidarClient.receiveLidarData()
                 _lidarConnectionStage.value = ConnectionStages.CONNECTION_SUCCEEDED
 
-                while (true) {
+                while (_lidarConnectionStage.value == ConnectionStages.CONNECTION_SUCCEEDED) {
                     _lidarImageBitmap.value = lidarClient.receiveLidarData()
                     isLidarConnected = true
                 }
