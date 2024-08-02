@@ -22,7 +22,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.aida.pages.CameraPage
 import com.example.aida.pages.ConfigurationPage
@@ -45,7 +43,6 @@ import com.example.aida.pages.UserGuidePage
 import com.example.aida.ui.composables.TopBar
 import com.example.aida.ui.theme.AIDATheme
 import com.example.aida.viewmodels.MainViewModel
-import com.example.aida.viewmodels.ButtonViewModel
 import com.example.aida.viewmodels.MainViewModelFactory
 import kotlinx.coroutines.launch
 
@@ -227,10 +224,6 @@ class MainActivity : ComponentActivity() {
                         )
                         2 -> UserGuidePage(
                             barHeight = barHeight,
-                            viewModel = viewModel,
-                            onButtonPress = {
-                                state = 0
-                            },
                             activity = this,
                         )
                     }

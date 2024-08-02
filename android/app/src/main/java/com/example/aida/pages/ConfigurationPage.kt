@@ -41,8 +41,7 @@ import com.example.aida.viewmodels.MainViewModel
 
 /**
  * The configuration page contains information on how to connect to AIDA
- * It's still in early development and might therefore change, currently
- * there is no logic and only an UI component
+ * It also shows the connections status of some of the nodes on AIDA
  *
  * @param barHeight used to ensure that the content is padded correctly
  * @param viewModel contains connection information, used to update IP
@@ -66,10 +65,7 @@ fun ConfigurationPage(
         val paddingSides = 30.dp
         val rowSpacing = 10.dp
 
-
-
-
-
+        // Here comes the connection variables for the nodes
         // Lidar connection variables
         var lidarConnectedText by remember { mutableStateOf("Disconnected") }
         var lidarImageBoolean by remember { mutableStateOf(false) }
@@ -243,31 +239,7 @@ fun ConfigurationPage(
                     },
                 )
             }
-            """
-            // Username & Password input, currently unused
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(rowSpacing)
-            ) {
-                var username by remember { mutableStateOf("") }
-                var password by remember { mutableStateOf("") }
 
-                // Username input, currently unused
-                TextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = { Text("Username") },
-                    modifier = standardInputModifier
-                )
-
-                // Password input, currently unused
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text("Password") },
-                    modifier = standardInputModifier
-                )
-            }
-            """
 
             // Button to confirm IP address and port
             Button(
@@ -284,10 +256,12 @@ fun ConfigurationPage(
                     .padding(20.dp)
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.4f)
-            ) {
+            )
+            {
                 Text("Connect")
             }
 
+            // AIDA logo at the bottom of the left column
             Image(
                 painter = painterResource(id = R.drawable.aida_logo_new),
                 contentDescription = "Example Image",
@@ -299,6 +273,8 @@ fun ConfigurationPage(
             )
         }
 
+
+        // Divider to separate the two columns
         VerticalDivider(
             modifier = Modifier
                 .padding(top = 30.dp, bottom = 30.dp)
@@ -308,8 +284,9 @@ fun ConfigurationPage(
         )
 
 
-        var scrollState = rememberScrollState()
-        // Column on the right side of the screen
+        val scrollState = rememberScrollState()
+
+        // Second column for the connection status of the nodes
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -318,13 +295,15 @@ fun ConfigurationPage(
             verticalArrangement = Arrangement.spacedBy(rowSpacing),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+
             // Top row
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Left column of top row
+                // Left column of top row, Mic node
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -351,16 +330,17 @@ fun ConfigurationPage(
                             .height(50.dp)
                             .width(50.dp)
                     )
-
                     Text(
                         text = STTConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
                 }
+
+                // Spacer between left column and right column
                 Spacer(modifier = Modifier.width(60.dp))
 
-                // Right column of top row
+                // Right column of top row, Lidar node
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -387,7 +367,6 @@ fun ConfigurationPage(
                             .height(50.dp)
                             .width(50.dp)
                     )
-
                     Text(
                         text = lidarConnectedText,
                         fontSize = 12.sp,
@@ -395,13 +374,15 @@ fun ConfigurationPage(
                     )
                 }
             }
+
+
             // Middle row
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Left column of middle row
+                // Left column of middle row, Camera node
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -428,16 +409,17 @@ fun ConfigurationPage(
                             .height(50.dp)
                             .width(50.dp)
                     )
-
                     Text(
                         text = cameraConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
                 }
+
+                // Spacer between left column and right column
                 Spacer(modifier = Modifier.width(60.dp))
 
-                // Right column of middle row
+                // Right column of bottom row, Gesture node
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -464,7 +446,6 @@ fun ConfigurationPage(
                             .height(50.dp)
                             .width(50.dp)
                     )
-
                     Text(
                         text = gestureConnectedText,
                         fontSize = 12.sp,
@@ -472,13 +453,15 @@ fun ConfigurationPage(
                     )
                 }
             }
+
+
             // Bottom row
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                // Left column of bottom row
+                // Left column of bottom row (there is no right column), Joystick node
                 Column(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = 30.dp)
@@ -505,18 +488,15 @@ fun ConfigurationPage(
                             .height(50.dp)
                             .width(50.dp)
                     )
-
                     Text(
                         text = JoystickConnectedText,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
                 }
-                Spacer(modifier = Modifier.width(60.dp))
-
-
             }
+
+
         }
     }
-
 }

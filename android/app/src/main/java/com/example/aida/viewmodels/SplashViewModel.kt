@@ -30,12 +30,11 @@ class SplashViewModel : ViewModel() {
     init {
         val loadingTime = 3000 //milliseconds
         MainScope().launch {
-            delay(loadingTime)
+            //delay(loadingTime)
             _isLoading.value = false
         }
     }
 }
-
 
 /**
  * Create the splash screen composable
