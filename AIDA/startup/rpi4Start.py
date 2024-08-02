@@ -2,8 +2,10 @@ import subprocess
 import os
 import time
 
+#Set path
 chmod_path = "/usr/bin/chmod"
 
+#Start the boot
 def run_commands(path):
     try:
         # Change to the workspace directory

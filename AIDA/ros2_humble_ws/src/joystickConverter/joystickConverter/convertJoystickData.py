@@ -14,27 +14,40 @@ class MinimalSubscriber(Node):
         self.publisher = self.create_publisher(String, 'joystick/direction', 10)
 
     def listener_callback(self, msg):
+        """
+        Callback function for incoming joystick data
+        """
         self.get_logger().info('I heard: "%s"' % msg.data)
 
     def converter(self, msg):
+        """
+        Method for converting raw joystick data into set action sequences
+
+        Args:
+            msg: The incoming joystick data
+        """
         x = msg.x
         y = -(msg.y)
         square = 1 / math.sqrt(2)
         
+        #Forwards
         if(y<=1) and (y> square):
-            print("moving forwards")
+            #print("moving forwards")
             self.joystickDirection = "forward"
+
+        #Backwards
         elif(y >= -1) and (y < -square):
-            print("moving backwards")
+            #print("moving backwards")
             self.joystickDirection = "backward"
         
+        #Right
         elif(x <= 1) and (x > square):
-            print("turning right")
+            #print("turning right")
             self.joystickDirection = "rigth"
 
-        
+        #Left        
         elif(x <= -1) and (x < square):
-            print("turning left")
+            #print("turning left")
             self.joystickDirection = "left"
 
         msg = String()
