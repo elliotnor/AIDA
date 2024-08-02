@@ -36,6 +36,7 @@ class SplashViewModel : ViewModel() {
     }
 }
 
+
 /**
  * Create the splash screen composable
  */

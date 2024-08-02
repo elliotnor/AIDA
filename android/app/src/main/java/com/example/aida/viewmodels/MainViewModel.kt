@@ -375,6 +375,7 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
 
 
 
+
     /**
      * Connects to the Lidar client and starts receiving Lidar data
      */
