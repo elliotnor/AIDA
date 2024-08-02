@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.example.aida.R
 import com.example.aida.ui.theme.TopBarColor
-import com.example.aida.viewmodels.ButtonViewModel
 import com.example.aida.viewmodels.MainViewModel
 
 /**
@@ -53,6 +52,7 @@ fun TopBar(
 ) {
 
     val barPadding = 15.dp
+    val topPadding = 4.dp
 
 
     Row(
@@ -117,7 +117,7 @@ fun TopBar(
                         onCameraClicked()
                     }
                     )
-                    .padding(top = 4.dp)
+                    .padding(top = topPadding)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.videocam),
@@ -141,7 +141,7 @@ fun TopBar(
                         viewModel.toggleButtonTwoState()
                     }
                     )
-                    .padding(top = 4.dp)
+                    .padding(top = topPadding)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.mic_button_400),
@@ -164,7 +164,7 @@ fun TopBar(
                         onGestureClicked()
                     }
                     )
-                    .padding(top = 4.dp)
+                    .padding(top = topPadding)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.hand_gesture),
@@ -182,8 +182,4 @@ fun TopBar(
 
         }
     }
-}
-
-fun reset(){
-
 }
