@@ -2,7 +2,6 @@ package com.example.aida.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -62,8 +61,17 @@ fun ConfigurationPage(
             .fillMaxSize(),
     ) {
         val paddingTop = 20.dp
-        val paddingSides = 30.dp
+        val padding = 30.dp
         val rowSpacing = 10.dp
+        val widthOfSmallColumn = 250.dp
+        val spacerBetweenSmallColumns = 60.dp
+
+        val fontSizeNodeName = 19.sp
+        val fontSizeConnectionStatus = 12.sp
+
+        val imageSizeLogo = 350.dp
+        val imageSizeNode = 150.dp
+        val imageSizeConnectionStatus = 50.dp
 
         // Here comes the connection variables for the nodes
         // Lidar connection variables
@@ -79,7 +87,7 @@ fun ConfigurationPage(
             lidarImageBoolean = false
         }
 
-        val lidarImage = if (lidarImageBoolean) {
+        val lidarConnectionImage = if (lidarImageBoolean) {
             painterResource(id = R.drawable.link_300)
         } else {
             painterResource(id = R.drawable.link_off_300)
@@ -98,7 +106,7 @@ fun ConfigurationPage(
             STTImageBoolean = false
         }
 
-        val STTImage = if (STTImageBoolean) {
+        val STTConnectionImage = if (STTImageBoolean) {
             painterResource(id = R.drawable.link_300)
         } else {
             painterResource(id = R.drawable.link_off_300)
@@ -117,7 +125,7 @@ fun ConfigurationPage(
             cameraImageBoolean = false
         }
 
-        val cameraImage = if (cameraImageBoolean) {
+        val cameraConnectionImage = if (cameraImageBoolean) {
             painterResource(id = R.drawable.link_300)
         } else {
             painterResource(id = R.drawable.link_off_300)
@@ -136,7 +144,7 @@ fun ConfigurationPage(
             gestureImageBoolean = false
         }
 
-        val gestureImage = if (gestureImageBoolean) {
+        val gestureConnectionImage = if (gestureImageBoolean) {
             painterResource(id = R.drawable.link_300)
         } else {
             painterResource(id = R.drawable.link_off_300)
@@ -156,7 +164,7 @@ fun ConfigurationPage(
             JoystickImageBoolean = false
         }
 
-        val JoystickImage = if (JoystickImageBoolean) {
+        val JoystickConnectionImage = if (JoystickImageBoolean) {
             painterResource(id = R.drawable.link_300)
         } else {
             painterResource(id = R.drawable.link_off_300)
@@ -168,7 +176,7 @@ fun ConfigurationPage(
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
-                .padding(top = paddingTop, start = paddingSides, end = paddingSides),
+                .padding(top = paddingTop, start = padding, end = padding),
             verticalArrangement = Arrangement.spacedBy(rowSpacing)
         ) {
             var ipInput by remember { mutableStateOf(viewModel.ipAddress.value) }
@@ -253,7 +261,7 @@ fun ConfigurationPage(
 
                 },
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(paddingTop)
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.4f)
             )
@@ -268,8 +276,8 @@ fun ConfigurationPage(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp)
-                    .height(350.dp)
-                    .width(350.dp)
+                    .height(imageSizeLogo)
+                    .width(imageSizeLogo)
             )
         }
 
@@ -277,7 +285,7 @@ fun ConfigurationPage(
         // Divider to separate the two columns
         VerticalDivider(
             modifier = Modifier
-                .padding(top = 30.dp, bottom = 30.dp)
+                .padding(top = padding, bottom = padding)
                 .fillMaxHeight()
                 .width(1.dp),
             color = Color.Gray
@@ -290,7 +298,7 @@ fun ConfigurationPage(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 30.dp, bottom = 30.dp)
+                .padding(top = padding, bottom = padding)
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(rowSpacing),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -306,8 +314,8 @@ fun ConfigurationPage(
                 // Left column of top row, Mic node
                 Column(
                     modifier = Modifier
-                        .padding(top = 30.dp, bottom = 30.dp)
-                        .width(250.dp),
+                        .padding(top = padding, bottom = padding)
+                        .width(widthOfSmallColumn),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -315,36 +323,36 @@ fun ConfigurationPage(
                         painter = painterResource(id = R.drawable.mic_500),
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
+                            .height(imageSizeNode)
+                            .width(imageSizeNode)
                     )
                     Text(
                         text = "STT",
-                        fontSize = 19.sp,
+                        fontSize = fontSizeNodeName,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = STTImage,
+                        painter = STTConnectionImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height(imageSizeConnectionStatus)
+                            .width(imageSizeConnectionStatus)
                     )
                     Text(
                         text = STTConnectedText,
-                        fontSize = 12.sp,
+                        fontSize = fontSizeConnectionStatus,
                         textAlign = TextAlign.Center
                     )
                 }
 
                 // Spacer between left column and right column
-                Spacer(modifier = Modifier.width(60.dp))
+                Spacer(modifier = Modifier.width(spacerBetweenSmallColumns))
 
                 // Right column of top row, Lidar node
                 Column(
                     modifier = Modifier
-                        .padding(top = 30.dp, bottom = 30.dp)
-                        .width(250.dp),
+                        .padding(top = padding, bottom = padding)
+                        .width(widthOfSmallColumn),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -352,24 +360,24 @@ fun ConfigurationPage(
                         painter = painterResource(id = R.drawable.lidar_500),
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
+                            .height(imageSizeNode)
+                            .width(imageSizeNode)
                     )
                     Text(
                         text = "LiDAR",
-                        fontSize = 19.sp,
+                        fontSize = fontSizeNodeName,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = lidarImage,
+                        painter = lidarConnectionImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height(imageSizeConnectionStatus)
+                            .width(imageSizeConnectionStatus)
                     )
                     Text(
                         text = lidarConnectedText,
-                        fontSize = 12.sp,
+                        fontSize = fontSizeConnectionStatus,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -385,8 +393,8 @@ fun ConfigurationPage(
                 // Left column of middle row, Camera node
                 Column(
                     modifier = Modifier
-                        .padding(top = 30.dp, bottom = 30.dp)
-                        .width(250.dp),
+                        .padding(top = padding, bottom = padding)
+                        .width(widthOfSmallColumn),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -394,36 +402,36 @@ fun ConfigurationPage(
                         painter = painterResource(id = R.drawable.videocam_500),
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
+                            .height(imageSizeNode)
+                            .width(imageSizeNode)
                     )
                     Text(
                         text = "Camera",
-                        fontSize = 19.sp,
+                        fontSize = fontSizeNodeName,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = cameraImage,
+                        painter = cameraConnectionImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height(imageSizeConnectionStatus)
+                            .width(imageSizeConnectionStatus)
                     )
                     Text(
                         text = cameraConnectedText,
-                        fontSize = 12.sp,
+                        fontSize = fontSizeConnectionStatus,
                         textAlign = TextAlign.Center
                     )
                 }
 
                 // Spacer between left column and right column
-                Spacer(modifier = Modifier.width(60.dp))
+                Spacer(modifier = Modifier.width(spacerBetweenSmallColumns))
 
                 // Right column of bottom row, Gesture node
                 Column(
                     modifier = Modifier
-                        .padding(top = 30.dp, bottom = 30.dp)
-                        .width(250.dp),
+                        .padding(top = padding, bottom = padding)
+                        .width(widthOfSmallColumn),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -431,24 +439,24 @@ fun ConfigurationPage(
                         painter = painterResource(id = R.drawable.hand_gesture_500),
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
+                            .height(imageSizeNode)
+                            .width(imageSizeNode)
                     )
                     Text(
                         text = "Image recognition",
-                        fontSize = 19.sp,
+                        fontSize = fontSizeNodeName,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = gestureImage,
+                        painter = gestureConnectionImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height(imageSizeConnectionStatus)
+                            .width(imageSizeConnectionStatus)
                     )
                     Text(
                         text = gestureConnectedText,
-                        fontSize = 12.sp,
+                        fontSize = fontSizeConnectionStatus,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -464,8 +472,8 @@ fun ConfigurationPage(
                 // Left column of bottom row (there is no right column), Joystick node
                 Column(
                     modifier = Modifier
-                        .padding(top = 30.dp, bottom = 30.dp)
-                        .width(250.dp),
+                        .padding(top = padding, bottom = padding)
+                        .width(widthOfSmallColumn),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -473,24 +481,24 @@ fun ConfigurationPage(
                         painter = painterResource(id = R.drawable.joystick_500),
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(150.dp)
-                            .width(150.dp)
+                            .height(imageSizeNode)
+                            .width(imageSizeNode)
                     )
                     Text(
                         text = "Joystick",
-                        fontSize = 19.sp,
+                        fontSize = fontSizeNodeName,
                         textAlign = TextAlign.Center
                     )
                     Image(
-                        painter = JoystickImage,
+                        painter = JoystickConnectionImage,
                         contentDescription = "Example Image",
                         modifier = Modifier
-                            .height(50.dp)
-                            .width(50.dp)
+                            .height(imageSizeConnectionStatus)
+                            .width(imageSizeConnectionStatus)
                     )
                     Text(
                         text = JoystickConnectedText,
-                        fontSize = 12.sp,
+                        fontSize = fontSizeConnectionStatus,
                         textAlign = TextAlign.Center
                     )
                 }
