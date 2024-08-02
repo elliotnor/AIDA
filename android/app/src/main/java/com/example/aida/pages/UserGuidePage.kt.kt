@@ -63,12 +63,19 @@ fun UserGuidePage(
             .padding(top = barHeight)
             .fillMaxSize(),
     ) {
-        val paddingTop = 20.dp
+
+        val padding = 20.dp
         val paddingSides = 30.dp
-        val rowSpacing = 10.dp
-        var pictureScale by remember { mutableStateOf(700.dp) }
+        val paddingPage = 100.dp
+        val rowSpacingForButton = 10.dp
+        val spacer = 25.dp
+        val smallSpacer = 5.dp
+        val titleSize = 25.sp
+        val logoSize = 700.dp
+        val imageSize = 400.dp
+        val smallImageSize = 1.dp
 
-
+        var pictureScale by remember { mutableStateOf(imageSize) }
         var title by remember { mutableStateOf("Connection guide") }
         var textContent by remember { mutableStateOf(readRawResource(activity, R.raw.connection_guide)) }
 
@@ -81,12 +88,12 @@ fun UserGuidePage(
         if(showImage){
             image1 = painterResource(id = R.drawable.aida_demo_new_new)
             image2 = painterResource(id = R.drawable.aida_demo_connection)
-            pictureScale = 400.dp
+            pictureScale = imageSize
         }
         else{
             image1 = painterResource(id = R.drawable.white)
             image2 = painterResource(id = R.drawable.white)
-            pictureScale = 1.dp
+            pictureScale = smallImageSize
         }
 
         // First column with buttons switching between different guides
@@ -94,25 +101,25 @@ fun UserGuidePage(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .padding( start = paddingSides, end = paddingSides),
-            verticalArrangement = Arrangement.spacedBy(rowSpacing)
+            verticalArrangement = Arrangement.spacedBy(rowSpacingForButton)
         ) {
 
             Column(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = paddingTop, start = paddingSides, end = paddingSides),
-                verticalArrangement = Arrangement.spacedBy(rowSpacing)
+                    .padding(top = padding, start = paddingSides, end = paddingSides),
+                verticalArrangement = Arrangement.spacedBy(rowSpacingForButton)
             ) {
 
                 Text(text = "User guide",
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp,
+                    fontSize = titleSize,
                     fontFamily = FontFamily.SansSerif
                 )
 
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.height(spacer))
 
                 // Button to access the Connection guide
                 Button(
@@ -124,7 +131,7 @@ fun UserGuidePage(
 
                     },
                     modifier = Modifier
-                        .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                        .padding(start = padding, end = padding, bottom = padding)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(0.8f)
                 ) {
@@ -140,7 +147,7 @@ fun UserGuidePage(
                         showImage = true
                     },
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(0.8f)
                 ) {
@@ -157,7 +164,7 @@ fun UserGuidePage(
 
                     },
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(padding)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(0.8f)
                 ) {
@@ -169,8 +176,8 @@ fun UserGuidePage(
                     painter =  painterResource(id = R.drawable.aida_logo_new),
                     contentDescription = "Example Image",
                     modifier = Modifier
-                        .height(600.dp)
-                        .width(600.dp)
+                        .height(logoSize)
+                        .width(logoSize)
                 )
             }
         }
@@ -178,9 +185,9 @@ fun UserGuidePage(
         // Divider between the two columns
         VerticalDivider(
             modifier = Modifier
-                .padding(top = 30.dp, bottom = 30.dp)
+                .padding(top = padding, bottom = padding)
                 .fillMaxHeight()
-                .width(10.dp),
+                .width(padding),
             color = Color.Gray
         )
 
@@ -188,16 +195,16 @@ fun UserGuidePage(
         // Second column to show of the page of the user guide
         Column(
             modifier = Modifier
-                .padding(top = paddingTop, start = 100.dp, end = 100.dp)
+                .padding(top = padding, start = paddingPage, end = paddingPage)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(rowSpacing)
+            verticalArrangement = Arrangement.spacedBy(rowSpacingForButton)
         ) {
             // The tile of the page
             Text(
                 text = title,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 fontWeight = FontWeight.Bold,
-                fontSize = 25.sp,
+                fontSize = titleSize,
                 fontFamily = FontFamily.SansSerif
 
             )
@@ -218,7 +225,7 @@ fun UserGuidePage(
                     .width(pictureScale)
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(smallSpacer))
 
             // The text content of the page
             Text(
