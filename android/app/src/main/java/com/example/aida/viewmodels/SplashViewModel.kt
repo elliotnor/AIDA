@@ -20,24 +20,30 @@ import androidx.lifecycle.ViewModel
 import com.example.aida.R
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-
+/**
+ * Simple ViewModel used to display the AIDA logo during launch
+ */
 class SplashViewModel : ViewModel() {
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
+        val loadingTime = 3000 //milliseconds
         MainScope().launch {
-            delay(3000) // 3 seconds delay
+            delay(loadingTime)
             _isLoading.value = false
         }
     }
 }
 
+/**
+ * Create the splash screen composable
+ */
 @Composable
 fun SplashScreen(splashViewModel: SplashViewModel = viewModel(), navigateToMain: () -> Unit) {
     val isLoading by splashViewModel.isLoading.observeAsState(true)
 
-    if (!isLoading) {
+    if (!isLoading) { //When finished -> Go to main screen
         navigateToMain()
     }
 
@@ -57,6 +63,6 @@ fun SplashScreen(splashViewModel: SplashViewModel = viewModel(), navigateToMain:
 @Composable
 fun SplashScreenPreview() {
     MaterialTheme {
-        SplashScreen(navigateToMain = {})
+        SplashScreen(navigateToMain = {}) //Go to main screen after delay
     }
 }

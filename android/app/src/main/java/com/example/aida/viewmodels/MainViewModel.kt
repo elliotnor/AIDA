@@ -176,8 +176,10 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     private val _sttConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     private val _joystickConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
     private val _gestureFeedConnectionStage = MutableStateFlow(ConnectionStages.CONNECTING)
+
     // Image bitmap for camera feed
     private val _videoBitmap = MutableStateFlow<ImageBitmap?>(null)
+
     // Image bitmap for lidar
     private val _lidarImageBitmap = MutableStateFlow<ImageBitmap?>(null)
 
@@ -189,8 +191,10 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
         _joystickConnectionStage.asStateFlow()
     val gestureFeedConnectionStage: StateFlow<ConnectionStages> =
         _gestureFeedConnectionStage.asStateFlow()
+
     // Image bitmap for camera feed
     val videoBitmap: StateFlow<ImageBitmap?> = _videoBitmap.asStateFlow()
+
     // Image bitmap for lidar
     val lidarImageBitmap: StateFlow<ImageBitmap?> = _lidarImageBitmap.asStateFlow()
 
@@ -234,6 +238,14 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
             }
     }
 
+
+    /**
+     * Toggles the gesture feed on and off
+     *  * If the gesture feed is on, it will close the connection to server and turn of
+     *     * gesture feed
+     *     * If the gesture feed is off, it will connect to the server and
+     *     * start the gesture feed
+     */
     fun toggleGestureFeed(){
         if (_gestureFeedConnectionStage.value == ConnectionStages.CONNECTION_SUCCEEDED){
             viewModelScope.launch (Dispatchers.IO){
@@ -431,6 +443,9 @@ class MainViewModel(private val dataStore: DataStore<Preferences>) : ViewModel()
     private val _isButtonTwoEnabled = MutableStateFlow(true)
     val isButtonTwoEnabled: StateFlow<Boolean> = _isButtonTwoEnabled
 
+    /**
+     * Toggles the on/off button states, a simple inverter
+     */
     fun toggleButtonTwoState() {
         if(_isButtonTwoEnabled.value){
             isSTTConnected = false
