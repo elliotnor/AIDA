@@ -72,10 +72,12 @@ fun UserGuidePage(
         val smallSpacer = 5.dp
         val titleSize = 25.sp
         val logoSize = 700.dp
-        val imageSize = 400.dp
+        val imageSizeWidth = 400.dp
+        val imageSizeHeight = 300.dp
         val smallImageSize = 1.dp
 
-        var pictureScale by remember { mutableStateOf(imageSize) }
+        var pictureWidth by remember { mutableStateOf(imageSizeWidth) }
+        var pictureHeight by remember { mutableStateOf(imageSizeHeight) }
         var title by remember { mutableStateOf("Connection guide") }
         var textContent by remember { mutableStateOf(readRawResource(activity, R.raw.connection_guide)) }
 
@@ -88,12 +90,14 @@ fun UserGuidePage(
         if(showImage){
             image1 = painterResource(id = R.drawable.aida_demo_new_new)
             image2 = painterResource(id = R.drawable.aida_demo_connection)
-            pictureScale = imageSize
+            pictureWidth = imageSizeWidth
+            pictureHeight = imageSizeHeight
         }
         else{
             image1 = painterResource(id = R.drawable.white)
             image2 = painterResource(id = R.drawable.white)
-            pictureScale = smallImageSize
+            pictureWidth = smallImageSize
+            pictureHeight = smallImageSize
         }
 
         // First column with buttons switching between different guides
@@ -127,6 +131,7 @@ fun UserGuidePage(
                         val jsonContent = readRawResource(activity, R.raw.connection_guide)
                         title = "Connection guide"
                         textContent = jsonContent
+                        print(textContent)
                         showImage = false
 
                     },
@@ -208,30 +213,36 @@ fun UserGuidePage(
                 fontFamily = FontFamily.SansSerif
 
             )
-            // The first image in case the application features button was pressed
-            Image(
-                painter =  image1,
-                contentDescription = "Example Image",
-                modifier = Modifier
-                    .height(pictureScale)
-                    .width(pictureScale)
-            )
-            // The second image in case the application features button was pressed
-            Image(
-                painter =  image2,
-                contentDescription = "Example Image",
-                modifier = Modifier
-                    .height(pictureScale)
-                    .width(pictureScale)
-            )
 
+            //Spacer(modifier = Modifier.height(spacer))
             Spacer(modifier = Modifier.height(smallSpacer))
+
+
+
 
             // The text content of the page
             Text(
                 text = textContent,
                 fontFamily = FontFamily.Monospace
             )
+
+            // The first image in case the application features button was pressed
+            Image(
+                painter =  image1,
+                contentDescription = "Example Image",
+                modifier = Modifier
+                    .height(pictureHeight)
+                    .width(pictureWidth)
+            )
+            // The second image in case the application features button was pressed
+            Image(
+                painter =  image2,
+                contentDescription = "Example Image",
+                modifier = Modifier
+                    .height(pictureHeight)
+                    .width(pictureWidth)
+            )
+
 
         }
     }
